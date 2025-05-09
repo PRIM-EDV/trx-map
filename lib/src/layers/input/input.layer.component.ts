@@ -4,7 +4,7 @@ import { InputLayerService } from './input.layer.service';
 @Component({
     selector: 'trx-input-layer',
     standalone: true,
-    styleUrls: ['./input.layer.component.css'],
+    styleUrls: ['./input.layer.component.scss'],
     templateUrl: './input.layer.component.html',
 })
 export class InputLayerComponent implements AfterViewInit {

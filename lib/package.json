@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^19.2.0",
-    "@angular/core": "^19.2.0"
+    "@angular/core": "^19.2.0",
+    "hammerjs": "^2.0.8"
   },
   "dependencies": {
-    "hammerjs": "^2.0.8",
     "tslib": "^2.3.0"
   },
   "sideEffects": false
