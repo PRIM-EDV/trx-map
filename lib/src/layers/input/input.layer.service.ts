@@ -57,7 +57,7 @@ export class InputLayerService {
   ) {
     for (let i = this.layers.length - 1; i >= 0; i--) {
       const handler = this.layers[i].layer[method] as Function | undefined;
-      if (handler && handler(event, ...args) === false) break;
+      if (handler && handler.call(this.layers[i].layer, event, ...args) === false) break;
     }
   }
 

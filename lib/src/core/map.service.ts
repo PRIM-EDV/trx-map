@@ -2,9 +2,7 @@ import { Injectable, signal, WritableSignal } from '@angular/core';
 
 import { Point } from './interfaces/point.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class MapService {
 
   public zoom: WritableSignal<number> = signal(1);

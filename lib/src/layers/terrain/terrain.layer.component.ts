@@ -10,7 +10,6 @@ import { InputLayerService } from '../input/input.layer.service';
 import { MapLayer } from '../common/interfaces/map.layer.interface';
 import { MapService } from '../../core/map.service';
 import { Point } from '../../core/interfaces/point.interface';
-
 @Component({
   selector: 'trx-terrain-layer',
   templateUrl: './terrain.layer.component.html',
@@ -30,17 +29,34 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
     this.render();
   });
 
+  private resizeObserver!: ResizeObserver;
+
   private panStarted: boolean = false;
   private panStart: Point = { x: 0, y: 0 };
+  private pinchStart: number = 1.0;
   private terrainSvg: HTMLImageElement = new Image();
 
-  constructor(private input: InputLayerService, private map: MapService) {
-    this.terrainSvg.src = 'assets/terrain.svg';
+  constructor(
+    private input: InputLayerService, 
+    private map: MapService,
+    private hostRef: ElementRef<HTMLElement>
+  ) {
+    this.terrainSvg.src = 'img/terrain/terrain.svg';
   }
 
   ngAfterViewInit(): void {
     this.input.register(this, 0);
+
+    this.resizeObserver = new ResizeObserver(() => this.resizeCanvasToHost());
+    this.resizeObserver.observe(this.hostRef.nativeElement);
+    this.resizeCanvasToHost();
+    console.log("Terrain layer initialized");
   }
+
+  ngOnDestroy(): void {
+    this.resizeObserver.disconnect();
+  }
+
 
   render() {
     const ctx = this.canvasRef.nativeElement.getContext('2d');
@@ -51,8 +67,8 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
 
     ctx.drawImage(
       this.terrainSvg,
-      offset.x * zoom,
-      offset.y * zoom,
+      offset.x,
+      offset.y,
       3540 * zoom,
       2440 * zoom
     );
@@ -81,23 +97,40 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
     return true;
   }
 
-   public onPinch(e: HammerInput): boolean {
-        const canvas = this.canvasRef.nativeElement;
-        const offset = this.map.offset();
-        const scale = this.map.zoom() / (1 / e.scale);
-        const zoom = this.map.zoom();
+  public onPinchStart(e: HammerInput): boolean {
+    this.pinchStart = this.map.zoom();
+    return true;
+  }
 
-        const delta = {
-            x: ((e.center.x - canvas.getBoundingClientRect().left - offset.x) / zoom) * (zoom - scale), 
-            y: ((e.center.y - canvas.getBoundingClientRect().top - offset.y) / zoom) * (zoom - scale)
-        }
+  public onPinch(e: HammerInput): boolean {
+    const canvas = this.canvasRef.nativeElement;
+    const offset = this.map.offset();
+    const scale = this.pinchStart / (1 / e.scale);
+    const zoom = this.map.zoom();
 
-        this.map.offset.set( {
-            x: offset.x + delta.x,
-            y: offset.y + delta.y
-        });;
-        this.map.zoom.set(scale);
+    const delta = {
+      x: ((e.center.x - canvas.getBoundingClientRect().left - offset.x) / zoom) * (zoom - scale),
+      y: ((e.center.y - canvas.getBoundingClientRect().top - offset.y) / zoom) * (zoom - scale),
+    };
 
-        return true;
-    }
+    this.map.offset.set({
+      x: offset.x + delta.x,
+      y: offset.y + delta.y,
+    });
+
+    this.map.zoom.set(scale);
+
+    return true;
+  }
+
+  private resizeCanvasToHost() {
+    const canvas = this.canvasRef.nativeElement;
+    const parent = this.hostRef.nativeElement;
+
+    const { width, height } = parent.getBoundingClientRect();
+    canvas.width = width;
+    canvas.height = height;
+
+    this.render();
+  }
 }
