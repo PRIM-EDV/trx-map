@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "prebuild": "ng build",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -28,5 +29,16 @@
     "@types/hammerjs": "^2.0.46",
     "ng-packagr": "^19.2.0",
     "typescript": "~5.7.2"
+  },
+  "module": "./dist/fesm2022/map.mjs",
+  "typings": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./dist/package.json"
+    },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/fesm2022/map.mjs"
+    }
   }
 }

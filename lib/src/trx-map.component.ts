@@ -4,6 +4,7 @@ import { InputLayerComponent } from './layers/input/input.layer.component';
 import { TerrainLayerComponent } from './layers/terrain/terrain.layer.component';
 
 import 'hammerjs';
+import { MapService } from './core/map.service';
 
 @Component({
   selector: 'trx-map',
@@ -12,12 +13,13 @@ import 'hammerjs';
     TerrainLayerComponent
   ],
   providers: [
+    MapService,
     InputLayerService
   ],
   standalone: true,
-  styleUrls: ['./map.component.scss'],
-  templateUrl: './map.component.html'
+  styleUrls: ['./trx-map.component.scss'],
+  templateUrl: './trx-map.component.html'
 })
-export class MapComponent {
+export class TrxMap {
 
 }
