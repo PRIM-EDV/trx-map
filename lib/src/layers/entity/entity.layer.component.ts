@@ -21,7 +21,7 @@ import { EntityLayerService } from './entity.layer.service';
   providers: [EntityLayerService],
 })
 export class EntityLayerComponent implements AfterViewInit, MapLayer {
-  public entities: InputSignal<Entity[]> = input<Entity[]>([]);
+  readonly entities: InputSignal<Entity[]> = input<Entity[]>([]);
   
   @ViewChild('entityCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
 
