@@ -58,7 +58,7 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
   }
 
   render() {
-    const ctx = this.canvasRef.nativeElement.getContext('2d');
+    const ctx = this.canvasRef?.nativeElement.getContext('2d');
     if (!ctx) return;
     
     ctx.clearRect(0, 0, this.canvasRef.nativeElement.width, this.canvasRef.nativeElement.height);

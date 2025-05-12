@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, effect, ElementRef, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, effect, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
 
 import { InputLayerService } from '../input/input.layer.service';
 import { MapLayer } from '../common/interfaces/map.layer.interface';
@@ -6,6 +6,7 @@ import { MapService } from '../../core/map.service';
 import { Point } from '../../core/interfaces/point.interface';
 import { PanState } from './interfaces/pan.state.interface';
 import { PinchState } from './interfaces/pinch.state.interface';
+import { MapClickEvent } from '../../core/interfaces/click-event.interface';
 
 @Component({
   selector: 'trx-terrain-layer',
@@ -14,6 +15,8 @@ import { PinchState } from './interfaces/pinch.state.interface';
 })
 export class TerrainLayerComponent implements AfterViewInit, MapLayer {
   @ViewChild('terrainCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
+
+  @Output() terrainContextMenu = new EventEmitter<MapClickEvent>();
 
   private onZoomChange = effect(() => {
     this.map.zoom();
@@ -52,7 +55,7 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
   }
 
   render() {
-    const ctx = this.canvasRef.nativeElement.getContext('2d');
+    const ctx = this.canvasRef?.nativeElement.getContext('2d');
     if (!ctx) return;
 
     const canvas = this.canvasRef.nativeElement;
@@ -63,6 +66,19 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage( this.terrainSvg, offset.x, offset.y, 3540 * zoom, 2440 * zoom);
     });
+  }
+
+  public onRightClick(e: MouseEvent): boolean {
+    e.preventDefault();
+
+    const mapClickEvent: MapClickEvent = Object.assign(e, {
+      mapX: (e.x - this.canvasRef.nativeElement.getBoundingClientRect().left - this.map.offset().x) / this.map.zoom(),
+      mapY: (e.y - this.canvasRef.nativeElement.getBoundingClientRect().top - this.map.offset().y) / this.map.zoom(),
+    });
+    
+    console.log(mapClickEvent);
+    this.terrainContextMenu.emit(mapClickEvent);
+    return false;
   }
 
   public onPanStart(e: HammerInput): boolean {
