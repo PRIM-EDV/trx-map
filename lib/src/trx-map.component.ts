@@ -10,6 +10,7 @@ import { Entity } from './core/models/entity';
 import { CommonModule } from '@angular/common';
 import { Point } from './core/interfaces/point.interface';
 import { MapClickEvent } from '../public-api';
+import { GridLayerComponent } from "./layers/grid/grid.layer.component";
 
 @Component({
   selector: 'trx-map',
@@ -17,7 +18,8 @@ import { MapClickEvent } from '../public-api';
     CommonModule,
     InputLayerComponent,
     TerrainLayerComponent,
-    EntityLayerComponent
+    EntityLayerComponent,
+    GridLayerComponent
 ],
   providers: [
     MapService,
