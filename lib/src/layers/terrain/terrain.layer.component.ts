@@ -7,6 +7,7 @@ import { Point } from '../../core/interfaces/point.interface';
 import { PanState } from './interfaces/pan.state.interface';
 import { PinchState } from './interfaces/pinch.state.interface';
 import { MapClickEvent } from '../../core/interfaces/click-event.interface';
+import { resizeCanvasToHost } from '../common/utils/resize';
 
 @Component({
   selector: 'trx-terrain-layer',
@@ -45,9 +46,14 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
   ngAfterViewInit(): void {
     this.input.register(this, 0);
 
-    this.resizeObserver = new ResizeObserver(() => this.resizeCanvasToHost());
+   this.resizeObserver = new ResizeObserver(() => {
+      resizeCanvasToHost(this.canvasRef.nativeElement, this.hostRef); 
+      this.render();
+    });
     this.resizeObserver.observe(this.hostRef.nativeElement);
-    this.resizeCanvasToHost();
+     
+    resizeCanvasToHost(this.canvasRef.nativeElement, this.hostRef); 
+    this.render();
   }
 
   ngOnDestroy(): void {
@@ -75,7 +81,7 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
       mapX: (e.x - this.canvasRef.nativeElement.getBoundingClientRect().left - this.map.offset().x) / this.map.zoom(),
       mapY: (e.y - this.canvasRef.nativeElement.getBoundingClientRect().top - this.map.offset().y) / this.map.zoom(),
     });
-    
+
     console.log(mapClickEvent);
     this.terrainContextMenu.emit(mapClickEvent);
     return false;
@@ -149,16 +155,5 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
     this.map.zoom.set(scale);
 
     return true;
-  }
-
-  private resizeCanvasToHost() {
-    const canvas = this.canvasRef.nativeElement;
-    const parent = this.hostRef.nativeElement;
-
-    const { width, height } = parent.getBoundingClientRect();
-    canvas.width = width;
-    canvas.height = height;
-
-    this.render();
   }
 }

@@ -13,6 +13,7 @@ import { MapLayer } from '../common/interfaces/map.layer.interface';
 import { MapService } from '../../core/map.service';
 import { Entity } from '../../core/models/entity';
 import { EntityLayerService } from './entity.layer.service';
+import { resizeCanvasToHost } from '../common/utils/resize';
 
 @Component({
   selector: 'trx-entity-layer',
@@ -52,9 +53,14 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
   ngAfterViewInit(): void {
     this.input.register(this, 0);
 
-    this.resizeObserver = new ResizeObserver(() => this.resizeCanvasToHost());
+    this.resizeObserver = new ResizeObserver(() => {
+      resizeCanvasToHost(this.canvasRef.nativeElement, this.hostRef); 
+      this.render();
+    });
     this.resizeObserver.observe(this.hostRef.nativeElement);
-    this.resizeCanvasToHost();
+     
+    resizeCanvasToHost(this.canvasRef.nativeElement, this.hostRef); 
+    this.render();
   }
 
   render() {
@@ -65,16 +71,5 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
     this.entities().forEach((entity) => {
       this.service.drawEntity(ctx, entity);
     })
-  }
-
-  private resizeCanvasToHost() {
-    const canvas = this.canvasRef.nativeElement;
-    const parent = this.hostRef.nativeElement;
-
-    const { width, height } = parent.getBoundingClientRect();
-    canvas.width = width;
-    canvas.height = height;
-
-    this.render();
   }
 }
