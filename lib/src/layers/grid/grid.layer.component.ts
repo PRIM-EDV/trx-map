@@ -18,7 +18,7 @@ export class GridLayerComponent implements AfterViewInit, MapLayer {
 
   private readonly cellSize = 30;
   private readonly labelSize = 20;
-  private readonly gridOffset = { x: 182, y: 18 };
+  private readonly gridOffset = { x: 0, y: 0 };
 
   private onZoomChange = effect(() => {
     this.map.zoom();
@@ -50,23 +50,36 @@ export class GridLayerComponent implements AfterViewInit, MapLayer {
     const ctx = this.canvasRef?.nativeElement.getContext('2d');
     if (!ctx) return;
     
-    ctx.clearRect(0, 0, this.canvasRef.nativeElement.width, this.canvasRef.nativeElement.height);
+    requestAnimationFrame(() => {
+      ctx.clearRect(0, 0, this.canvasRef.nativeElement.width, this.canvasRef.nativeElement.height);
 
-    this.drawAxisLines(ctx, 30, 'x');
-    this.drawAxisLines(ctx, 30, 'y');
+      this.drawAxisLines(ctx, 30, 'x');
+      this.drawAxisLines(ctx, 30, 'y');
+      this.drawAxisBackgrounds(ctx);
+      this.drawAxisLabels(ctx, 30, 'x');
+      this.drawAxisLabels(ctx, 30, 'y');
+    });
   }
 
   ngOnInit(): void {
   }
 
+  private drawAxisBackgrounds(ctx: CanvasRenderingContext2D) {
+    const canvas = this.canvasRef.nativeElement;
+    
+    ctx.fillStyle = '#1b1b1b';
+    ctx.fillRect(0, canvas.height - this.labelSize, canvas.width, this.labelSize);
+    ctx.fillRect(0, 0, this.labelSize, canvas.height);
+  }
+
   private drawAxisLines(ctx: CanvasRenderingContext2D, count: number, axis: 'x' | 'y') {
+    const { offset, scale, gridOffset } = this.getAxisProps(axis);
     const canvas = this.canvasRef.nativeElement;
     const zoom = this.map.zoom();
-    const offset = axis === 'x' ? this.map.offset().x : this.map.offset().y;
-    const scale = axis === 'x' ? this.map.scale().x : this.map.scale().y;
-    const gridOffset = axis === 'x' ? this.gridOffset.x : this.gridOffset.y;
+
     const step = this.cellSize * scale * zoom;
 
+    ctx.save();
     ctx.globalAlpha = 0.3;
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 1;
@@ -84,5 +97,42 @@ export class GridLayerComponent implements AfterViewInit, MapLayer {
       }
       ctx.stroke();
     }
+    ctx.restore();
+  }
+
+  private drawAxisLabels(ctx: CanvasRenderingContext2D, count: number, axis: 'x' | 'y'): void {
+    const { offset, scale, gridOffset } = this.getAxisProps(axis);
+    const canvas = this.canvasRef.nativeElement;
+    const zoom = this.map.zoom();
+
+    const step = this.cellSize * scale * zoom;
+
+    ctx.save();
+    ctx.font = '12px Fira Code';
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    for (let i = 0; i < count; i++) {
+      const pos = offset + i * step + gridOffset * scale * zoom;
+
+      if (axis === 'x') {
+        ctx.fillText(`X${i + 1}`, pos + step / 2, canvas.height - this.labelSize / 2);
+      } else {
+        ctx.save();
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillText(`Y${count - i}`, -pos - step / 2, this.labelSize / 2);
+        ctx.restore();
+      }
+    }
+    ctx.restore();
+  }
+
+  private getAxisProps(axis: 'x' | 'y') {
+    return {
+      offset: this.map.offset()[axis],
+      scale: this.map.scale()[axis],
+      gridOffset: this.gridOffset[axis]
+    };
   }
 }
