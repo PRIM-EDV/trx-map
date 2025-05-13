@@ -44,28 +44,28 @@ export class EntityLayerService {
   }
   
   private drawOutlinedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, factor: number) {
-      ctx.textAlign = 'center';
+    ctx.textAlign = 'center';
 
-      ctx.font = '11px Fira Code';
-      ctx.fillStyle = '#000000';
-      ctx.lineWidth = 2;
-      ctx.strokeText(text, x, y + 12 + 24 * factor);
+    ctx.font = '11px Fira Code';
+    ctx.fillStyle = '#000000';
+    ctx.lineWidth = 2;
+    ctx.strokeText(text, x, y + 12 + 24 * factor);
 
-      ctx.font = '11px Fira Code';
-      ctx.fillStyle = '#ffffff';
-      ctx.lineWidth = 1;
-      ctx.fillText(text, x, y + 12 + 24 * factor);
+    ctx.font = '11px Fira Code';
+    ctx.fillStyle = '#ffffff';
+    ctx.lineWidth = 1;
+    ctx.fillText(text, x, y + 12 + 24 * factor);
   }
 
-    private async loadIcons() {
-      this.unitIcons = await Promise.all(
-        ICON_PATHS.units.map((path) => loadImage(path))
-      );
-      this.enemyIcons = await Promise.all(
-        ICON_PATHS.enemies.map((path) => loadImage(path))
-      );
-      this.objectIcons = await Promise.all(
-        ICON_PATHS.objects.map((path) => loadImage(path))
-      );
-    }
+  private async loadIcons() {
+    this.unitIcons = await Promise.all(
+      ICON_PATHS.units.map((path) => loadImage(path))
+    );
+    this.enemyIcons = await Promise.all(
+      ICON_PATHS.enemies.map((path) => loadImage(path))
+    );
+    this.objectIcons = await Promise.all(
+      ICON_PATHS.objects.map((path) => loadImage(path))
+    );
+  }
 }

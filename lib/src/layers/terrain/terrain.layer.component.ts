@@ -82,7 +82,6 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
       mapY: (e.y - this.canvasRef.nativeElement.getBoundingClientRect().top - this.map.offset().y) / this.map.zoom(),
     });
 
-    console.log(mapClickEvent);
     this.terrainContextMenu.emit(mapClickEvent);
     return false;
   }
