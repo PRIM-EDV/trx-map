@@ -1,13 +1,11 @@
 {
   "name": "@trx/map",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "prebuild": "ng build",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "prepare": "npm run build",
+    "build": "ng build trx-map",
+    "watch": "ng build --watch --configuration development"
   },
   "private": true,
   "dependencies": {
@@ -27,10 +25,10 @@
     "@angular/platform-browser-dynamic": "^19.2.8",
     "@angular/router": "^19.2.8",
     "@types/hammerjs": "^2.0.46",
-    "ng-packagr": "^19.2.8",
+    "ng-packagr": "^19.2.2",
     "typescript": "~5.7.2"
   },
-  "module": "./dist/fesm2022/map.mjs",
+  "module": "./dist/fesm2022/trx-map.mjs",
   "typings": "./dist/index.d.ts",
   "exports": {
     "./package.json": {
@@ -38,7 +36,7 @@
     },
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/fesm2022/map.mjs"
+      "default": "./dist/fesm2022/trx-map.mjs"
     }
   }
 }

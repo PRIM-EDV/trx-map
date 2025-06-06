@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "",
   "projects": {
-    "map": {
+    "trx-map": {
       "projectType": "library",
       "root": "lib",
       "sourceRoot": "lib/src",
