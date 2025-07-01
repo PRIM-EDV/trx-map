@@ -8,6 +8,7 @@ import { PanState } from './interfaces/pan.state.interface';
 import { PinchState } from './interfaces/pinch.state.interface';
 import { MapClickEvent } from '../../core/interfaces/click-event.interface';
 import { resizeCanvasToHost } from '../common/utils/resize';
+import { assets } from '../../../assets/assets';
 
 @Component({
   selector: 'trx-terrain-layer',
@@ -40,7 +41,7 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
     private map: MapService,
     private hostRef: ElementRef<HTMLElement>
   ) {
-    this.terrainSvg.src = 'img/terrain/terrain.svg';
+    this.terrainSvg.src = assets['terrain/terrain.svg'];
   }
 
   ngAfterViewInit(): void {

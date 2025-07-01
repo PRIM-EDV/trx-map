@@ -1,21 +1,23 @@
-export const ICON_PATHS = {
+import { SvgAssetPath } from "../../../../assets/assets";
+
+export const ICON_PATHS: {units: SvgAssetPath[], enemies: SvgAssetPath[], objects: SvgAssetPath[]} = {
   units: [
-    'assets/icons/icon_friend.svg',
-    'assets/icons/icon_friend10.svg',
-    'assets/icons/icon_friend15.svg',
-    'assets/icons/icon_friend20.svg',
-    'assets/icons/icon_friend25.svg',
-    'assets/icons/icon_friend30.svg',
+    'icons/icon_friend.svg',
+    'icons/icon_friend10.svg',
+    'icons/icon_friend15.svg',
+    'icons/icon_friend20.svg',
+    'icons/icon_friend25.svg',
+    'icons/icon_friend30.svg',
   ],
   enemies: [
-    'assets/icons/icon_foe.svg',
-    'assets/icons/icon_foe10.svg',
-    'assets/icons/icon_foe15.svg',
-    'assets/icons/icon_foe20.svg',
-    'assets/icons/icon_foe25.svg',
-    'assets/icons/icon_foe30.svg',
+    'icons/icon_foe.svg',
+    'icons/icon_foe10.svg',
+    'icons/icon_foe15.svg',
+    'icons/icon_foe20.svg',
+    'icons/icon_foe25.svg',
+    'icons/icon_foe30.svg',
   ],
   objects: [
-    'assets/icons/icon_object.svg',
+    'icons/icon_object.svg',
   ],
 };

@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "prepare": "npm run build",
+    "prebuild": "node ./scripts/bundle-assets.js",
     "build": "ng build trx-map",
     "watch": "ng build --watch --configuration development"
   },
@@ -26,6 +27,7 @@
     "@angular/router": "^19.2.8",
     "@types/hammerjs": "^2.0.46",
     "ng-packagr": "^19.2.2",
+    "ts-node": "^10.9.2",
     "typescript": "~5.7.2"
   },
   "module": "./dist/fesm2022/trx-map.mjs",

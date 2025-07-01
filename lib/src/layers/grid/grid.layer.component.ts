@@ -3,7 +3,6 @@ import { Component, Input, OnInit, ChangeDetectionStrategy, AfterViewInit, ViewC
 import { MapLayer } from '../common/interfaces/map.layer.interface';
 import { MapService } from '../../core/map.service';
 import { resizeCanvasToHost } from '../common/utils/resize';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'trx-grid-layer',
