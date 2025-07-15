@@ -79,8 +79,8 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
     e.preventDefault();
 
     const mapClickEvent: MapClickEvent = Object.assign(e, {
-      mapX: (e.x - this.canvasRef.nativeElement.getBoundingClientRect().left - this.map.offset().x) / this.map.zoom(),
-      mapY: (e.y - this.canvasRef.nativeElement.getBoundingClientRect().top - this.map.offset().y) / this.map.zoom(),
+      mapX: (e.x - this.canvasRef.nativeElement.getBoundingClientRect().left - this.map.offset().x) / this.map.zoom() / this.map.scale().x,
+      mapY: (e.y - this.canvasRef.nativeElement.getBoundingClientRect().top - this.map.offset().y) / this.map.zoom() / this.map.scale().x,
     });
 
     this.terrainContextMenu.emit(mapClickEvent);

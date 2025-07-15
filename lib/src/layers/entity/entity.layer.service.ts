@@ -4,6 +4,7 @@ import { MapService } from "../../core/map.service";
 import { Entity, EntityType } from "../../core/models/entity";
 import { ICON_PATHS } from "./config/icon.config";
 import { loadImage } from "../common/utils/image";
+import { assets } from '../../../assets/assets';
 
 @Injectable()
 export class EntityLayerService {
@@ -59,13 +60,13 @@ export class EntityLayerService {
 
   private async loadIcons() {
     this.unitIcons = await Promise.all(
-      ICON_PATHS.units.map((path) => loadImage(path))
+      ICON_PATHS.units.map((path) => loadImage(assets[path]))
     );
     this.enemyIcons = await Promise.all(
-      ICON_PATHS.enemies.map((path) => loadImage(path))
+      ICON_PATHS.enemies.map((path) => loadImage(assets[path]))
     );
     this.objectIcons = await Promise.all(
-      ICON_PATHS.objects.map((path) => loadImage(path))
+      ICON_PATHS.objects.map((path) => loadImage(assets[path]))
     );
   }
 }
