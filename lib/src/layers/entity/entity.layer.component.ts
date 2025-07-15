@@ -17,6 +17,7 @@ import { Entity } from '../../core/models/entity';
 import { EntityLayerService } from './entity.layer.service';
 import { resizeCanvasToHost } from '../common/utils/resize';
 import { EntityClickEvent } from '../../core/interfaces/entity-click-event.interface';
+import { Point } from '../../core/interfaces/point.interface';
 
 @Component({
   selector: 'trx-entity-layer',
@@ -90,15 +91,45 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
     return true;
   }
 
-  private hitscan(e: MouseEvent, entity: Entity): boolean {
+  public onPanStart(e: HammerInput): boolean {
+      // this.panState.isPanning = true;
+      // this.panState.start = this.map.offset();
+      for (const entity of this.entities()) {
+        if (this.hitscan(e, entity)) {
+          return false;  
+        }
+      }
+
+      return true;
+    }
+  
+  public onPan(e: any, offset: Point): boolean {
+    // if (e.maxPointers === 1 && this.panState.isPanning) {
+    //   this.map.offset.set({
+    //     x: this.panState.start.x + e.deltaX,
+    //     y: this.panState.start.y + e.deltaY,
+    //   });
+    // }
+
+    return true;
+  }
+
+  public onPanEnd(e: HammerInput): boolean {
+    // this.panState.isPanning = false;
+    return true;
+  }
+
+  private hitscan(e: MouseEvent | HammerInput, entity: Entity): boolean {
     const offset = this.map.offset();
     const scale = this.map.scale();
     const zoom = this.map.zoom();
+    const x = e instanceof MouseEvent ? e.offsetX : e.center.x;
+    const y = e instanceof MouseEvent ? e.offsetY : e.center.y;
 
     const hitboxSize = 24 * Math.min(0.5, zoom);
 
-    const mapX = (e.x - offset.x) / (scale.x * zoom);
-    const mapY = (e.y - offset.y) / (scale.y * zoom);
+    const mapX = (x - offset.x) / (scale.x * zoom);
+    const mapY = (y - offset.y) / (scale.y * zoom);
 
     const halfWidth = hitboxSize / (scale.x * zoom);
     const halfHeight = hitboxSize / (scale.y * zoom);
