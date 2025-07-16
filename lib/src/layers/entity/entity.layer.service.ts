@@ -6,6 +6,8 @@ import { ICON_PATHS } from "./config/icon.config";
 import { loadImage } from "../common/utils/image";
 import { assets } from '../../../assets/assets';
 
+const ENTITY_SIZE = 48; // Default size for entities
+
 @Injectable()
 export class EntityLayerService {
 
@@ -28,34 +30,36 @@ export class EntityLayerService {
     const y = offset.y + entity.position.y * scale.y * zoom;
 
     const factor = Math.min(0.5, zoom) * 2;
+    const size = ENTITY_SIZE * factor;
+    const halfSize = size / 2;
 
     switch(true) {
       case entity.type === EntityType.FOE:
-        ctx.drawImage(this.enemyIcons[entity.size], x - 16 * factor, y - 16 * factor, 32 * factor, 32 * factor); 
+        ctx.drawImage(this.enemyIcons[entity.size], x - halfSize, y - halfSize, size, size); 
         break;
       case entity.type === EntityType.FRIEND:
-        ctx.drawImage(this.unitIcons[entity.size], x - 16 * factor, y - 16 * factor, 32 * factor, 32 * factor);
-        this.drawOutlinedText(ctx, entity.text, x - 16 * factor, y - 16 * factor, factor); 
+        ctx.drawImage(this.unitIcons[entity.size], x - halfSize, y - halfSize, size, size);
+        this.drawOutlinedText(ctx, entity.text, x, y + halfSize + 11); 
         break
       case entity.type === EntityType.OBJECT:
-        ctx.drawImage(this.objectIcons[entity.size], x - 16 * factor, y - 16 * factor, 32 * factor, 32 * factor);
-        this.drawOutlinedText(ctx, entity.text, x - 16 * factor, y - 16 * factor, factor);
+        ctx.drawImage(this.objectIcons[entity.size], x - halfSize, y - halfSize, size, size);
+        this.drawOutlinedText(ctx, entity.text, x, y + halfSize + 11);
         break;
     }
   }
   
-  private drawOutlinedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, factor: number) {
+  private drawOutlinedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
     ctx.textAlign = 'center';
 
     ctx.font = '11px Fira Code';
     ctx.fillStyle = '#000000';
     ctx.lineWidth = 2;
-    ctx.strokeText(text, x, y + 12 + 24 * factor);
+    ctx.strokeText(text, x, y);
 
     ctx.font = '11px Fira Code';
     ctx.fillStyle = '#ffffff';
     ctx.lineWidth = 1;
-    ctx.fillText(text, x, y + 12 + 24 * factor);
+    ctx.fillText(text, x, y);
   }
 
   private async loadIcons() {
