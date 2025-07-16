@@ -2,11 +2,9 @@ import { Injectable } from "@angular/core";
 
 import { MapService } from "../../core/map.service";
 import { Entity, EntityType } from "../../core/models/entity";
-import { ICON_PATHS } from "./config/icon.config";
+import { ICON_PATHS, ICON_SIZE } from "./config/icon.config";
 import { loadImage } from "../common/utils/image";
 import { assets } from '../../../assets/assets';
-
-const ENTITY_SIZE = 48; // Default size for entities
 
 @Injectable()
 export class EntityLayerService {
@@ -30,7 +28,7 @@ export class EntityLayerService {
     const y = offset.y + entity.position.y * scale.y * zoom;
 
     const factor = Math.min(0.5, zoom) * 2;
-    const size = ENTITY_SIZE * factor;
+    const size = ICON_SIZE * factor;
     const halfSize = size / 2;
 
     switch(true) {

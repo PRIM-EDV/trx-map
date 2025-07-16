@@ -18,6 +18,8 @@ import { EntityLayerService } from './entity.layer.service';
 import { resizeCanvasToHost } from '../common/utils/resize';
 import { EntityClickEvent } from '../../core/interfaces/entity-click-event.interface';
 import { Point } from '../../core/interfaces/point.interface';
+import { PanState } from '../common/interfaces/pan.state.interface';
+import { ICON_SIZE } from './config/icon.config';
 
 @Component({
   selector: 'trx-entity-layer',
@@ -31,7 +33,10 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
   @ViewChild('entityCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
 
   @Output() entityContextMenu = new EventEmitter<EntityClickEvent>();
+  @Output() entityMoved = new EventEmitter<Entity>();
 
+  private panState: PanState = { isPanning: false, start: { x: 0, y: 0 } };
+  private panEntity: Entity | null = null;
   private resizeObserver!: ResizeObserver;
 
   private onEntityChange = effect(() => {
@@ -92,30 +97,36 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
   }
 
   public onPanStart(e: HammerInput): boolean {
-      // this.panState.isPanning = true;
-      // this.panState.start = this.map.offset();
       for (const entity of this.entities()) {
         if (this.hitscan(e, entity)) {
-          return false;  
+          this.panEntity = entity;
+          this.panState.isPanning = true;
+          this.panState.start = {
+            x: (e.center.x - this.canvasRef.nativeElement.getBoundingClientRect().left - this.map.offset().x) / this.map.zoom() / this.map.scale().x,
+            y: (e.center.y - this.canvasRef.nativeElement.getBoundingClientRect().top - this.map.offset().y) / this.map.zoom() / this.map.scale().y,
+          }
+          return false;
         }
       }
-
       return true;
     }
   
   public onPan(e: any, offset: Point): boolean {
-    // if (e.maxPointers === 1 && this.panState.isPanning) {
-    //   this.map.offset.set({
-    //     x: this.panState.start.x + e.deltaX,
-    //     y: this.panState.start.y + e.deltaY,
-    //   });
-    // }
-
+    if (e.maxPointers === 1 && this.panState.isPanning && this.panEntity) {
+        this.panEntity.position.x = this.panState.start.x + e.deltaX / this.map.zoom() / this.map.scale().x;
+        this.panEntity.position.y = this.panState.start.y + e.deltaY / this.map.zoom() / this.map.scale().y;
+        this.render();
+    }
     return true;
   }
 
   public onPanEnd(e: HammerInput): boolean {
-    // this.panState.isPanning = false;
+    if (this.panEntity) {
+      this.entityMoved.emit(this.panEntity);
+      this.panEntity = null;
+    }
+    
+    this.panState.isPanning = false;
     return true;
   }
 
@@ -126,7 +137,7 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
     const x = e instanceof MouseEvent ? e.offsetX : e.center.x;
     const y = e instanceof MouseEvent ? e.offsetY : e.center.y;
 
-    const hitboxSize = 32 * Math.min(0.5, zoom);
+    const hitboxSize = ICON_SIZE * Math.min(0.5, zoom);
 
     const mapX = (x - this.canvasRef.nativeElement.getBoundingClientRect().left - offset.x) / zoom / scale.x;
     const mapY = (y - this.canvasRef.nativeElement.getBoundingClientRect().top - offset.y) / zoom / scale.y;

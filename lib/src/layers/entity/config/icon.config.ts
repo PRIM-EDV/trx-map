@@ -21,3 +21,5 @@ export const ICON_PATHS: {units: SvgAssetPath[], enemies: SvgAssetPath[], object
     'icons/icon_object.svg',
   ],
 };
+
+export const ICON_SIZE = 48; 
