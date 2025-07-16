@@ -31,15 +31,15 @@ export class EntityLayerService {
 
     switch(true) {
       case entity.type === EntityType.FOE:
-        ctx.drawImage(this.enemyIcons[entity.size], x, y, 32 * factor, 32 * factor); 
+        ctx.drawImage(this.enemyIcons[entity.size], x - 16 * factor, y - 16 * factor, 32 * factor, 32 * factor); 
         break;
       case entity.type === EntityType.FRIEND:
-        ctx.drawImage(this.unitIcons[entity.size], x, y, 32 * factor, 32 * factor);
-        this.drawOutlinedText(ctx, entity.text, x, y, factor); 
+        ctx.drawImage(this.unitIcons[entity.size], x - 16 * factor, y - 16 * factor, 32 * factor, 32 * factor);
+        this.drawOutlinedText(ctx, entity.text, x - 16 * factor, y - 16 * factor, factor); 
         break
       case entity.type === EntityType.OBJECT:
-        ctx.drawImage(this.objectIcons[entity.size], x, y, 32 * factor, 32 * factor);
-        this.drawOutlinedText(ctx, entity.text, x, y, factor);
+        ctx.drawImage(this.objectIcons[entity.size], x - 16 * factor, y - 16 * factor, 32 * factor, 32 * factor);
+        this.drawOutlinedText(ctx, entity.text, x - 16 * factor, y - 16 * factor, factor);
         break;
     }
   }
