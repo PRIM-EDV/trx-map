@@ -126,10 +126,10 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
     const x = e instanceof MouseEvent ? e.offsetX : e.center.x;
     const y = e instanceof MouseEvent ? e.offsetY : e.center.y;
 
-    const hitboxSize = 24 * Math.min(0.5, zoom);
+    const hitboxSize = 32 * Math.min(0.5, zoom);
 
-    const mapX = (x - offset.x) / (scale.x * zoom);
-    const mapY = (y - offset.y) / (scale.y * zoom);
+    const mapX = (x - this.canvasRef.nativeElement.getBoundingClientRect().left - offset.x) / zoom / scale.x;
+    const mapY = (y - this.canvasRef.nativeElement.getBoundingClientRect().top - offset.y) / zoom / scale.y;
 
     const halfWidth = hitboxSize / (scale.x * zoom);
     const halfHeight = hitboxSize / (scale.y * zoom);
