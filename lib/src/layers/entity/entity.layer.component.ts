@@ -79,7 +79,11 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
     if (!ctx) return;
     ctx.clearRect(0, 0, this.canvasRef.nativeElement.width, this.canvasRef.nativeElement.height);
     this.entities().forEach((entity) => {
-      this.service.drawEntity(ctx, entity);
+      try {
+        this.service.drawEntity(ctx, entity);
+      } catch (error) {
+        console.error(`Error rendering entity ${entity}:`, error);
+      }
     })
   }
 
