@@ -34,6 +34,7 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
   @ViewChild('entityAnimationCanvas', { static: true }) animationCanvasRef!: ElementRef<HTMLCanvasElement>;
 
   @Output() entityContextMenu = new EventEmitter<EntityClickEvent>();
+  @Output() entityDoubleClick = new EventEmitter<EntityClickEvent>();
   @Output() entityMoved = new EventEmitter<Entity>();
 
   private panState: PanState = { isPanning: false, start: { x: 0, y: 0 } };
@@ -91,6 +92,19 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
         console.error(`Error rendering entity ${entity}:`, error);
       }
     })
+  }
+
+  public onDoubleClick(e: MouseEvent): boolean {
+    e.preventDefault();
+
+    for (const entity of this.entities()) {
+      if (this.hitscan(e, entity)) {
+        const entityClickEvent: EntityClickEvent = Object.assign(e, { entity: entity });
+        this.entityDoubleClick.emit(entityClickEvent);
+        return false;
+      }
+    }
+    return true;
   }
 
   public onRightClick(e: MouseEvent): boolean {

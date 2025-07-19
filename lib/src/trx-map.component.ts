@@ -33,5 +33,6 @@ export class TrxMap {
 
   @Output() terrainContextMenu = new EventEmitter<MapClickEvent>();
   @Output() entityContextMenu = new EventEmitter<EntityClickEvent>();
+  @Output() entityDoubleClick = new EventEmitter<EntityClickEvent>();
   @Output() entityMoved = new EventEmitter<Entity>();
 }
