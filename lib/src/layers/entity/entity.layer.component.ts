@@ -13,7 +13,7 @@ import {
 import { InputLayerService } from '../input/input.layer.service';
 import { MapLayer } from '../common/interfaces/map.layer.interface';
 import { MapService } from '../../core/map.service';
-import { Entity } from '../../core/models/entity';
+import { Entity, EntityState, EntityType } from '../../core/models/entity';
 import { EntityLayerService } from './entity.layer.service';
 import { resizeCanvasToHost } from '../common/utils/resize';
 import { EntityClickEvent } from '../../core/interfaces/entity-click-event.interface';
@@ -31,6 +31,7 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
   readonly entities: InputSignal<Entity[]> = input<Entity[]>([]);
   
   @ViewChild('entityCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('entityAnimationCanvas', { static: true }) animationCanvasRef!: ElementRef<HTMLCanvasElement>;
 
   @Output() entityContextMenu = new EventEmitter<EntityClickEvent>();
   @Output() entityMoved = new EventEmitter<Entity>();
@@ -65,13 +66,18 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
     this.input.register(this, 1);
 
     this.resizeObserver = new ResizeObserver(() => {
-      resizeCanvasToHost(this.canvasRef.nativeElement, this.hostRef); 
+      resizeCanvasToHost(this.canvasRef.nativeElement, this.hostRef);
+      resizeCanvasToHost(this.animationCanvasRef.nativeElement, this.hostRef);
       this.render();
     });
     this.resizeObserver.observe(this.hostRef.nativeElement);
      
-    resizeCanvasToHost(this.canvasRef.nativeElement, this.hostRef); 
+    resizeCanvasToHost(this.canvasRef.nativeElement, this.hostRef);
+    resizeCanvasToHost(this.animationCanvasRef.nativeElement, this.hostRef);
+
     this.render();
+
+    this.initializePingAnimation();
   }
 
   render() {
@@ -153,5 +159,27 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
     const withinY = mapY >= entity.position.y - halfHeight && mapY <= entity.position.y + halfHeight;
 
     return withinX && withinY;
+  }
+
+  private initializePingAnimation() {
+    const animationCtx = this.animationCanvasRef?.nativeElement.getContext('2d');
+    if (!animationCtx) return;
+
+    const animationDuration = 1000; 
+    const animationStart = performance.now();
+    const animate = (timestamp: number) => {
+        const elapsed = timestamp - animationStart;
+        const progress = (elapsed % animationDuration) / animationDuration;
+
+        animationCtx.clearRect(0, 0, this.animationCanvasRef?.nativeElement.width, this.animationCanvasRef?.nativeElement.height);
+        this.entities().forEach((entity) => {
+            if (entity.type === EntityType.FRIEND && entity.state === EntityState.BATTLE) {
+                this.service.drawEntityPing(animationCtx, entity, progress);
+            }
+        });
+
+        requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
   }
 }

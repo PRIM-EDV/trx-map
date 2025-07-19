@@ -19,6 +19,11 @@ export class EntityLayerService {
     this.loadIcons();
   }
 
+  /**
+   * Draws an entity on the canvas.
+   * @param ctx The canvas rendering context.
+   * @param entity The entity to draw.
+   */
   public drawEntity(ctx: CanvasRenderingContext2D, entity: Entity) {
     const offset = this.map.offset();
     const scale = this.map.scale();
@@ -44,6 +49,30 @@ export class EntityLayerService {
         this.drawOutlinedText(ctx, entity.text, x, y + halfSize + 11);
         break;
     }
+  }
+
+  /**
+   * Draws a ping animation for an entity on the canvas.
+   * @param ctx The canvas rendering context.
+   * @param entity The entity to draw.
+   * @param progress The progress of the animation (0 to 1).
+   */
+  public drawEntityPing(ctx: CanvasRenderingContext2D, entity: Entity, progress: number) {
+    const offset = this.map.offset();
+    const scale = this.map.scale();
+    const zoom = this.map.zoom();
+
+    const x = offset.x + entity.position.x * scale.x * zoom;
+    const y = offset.y + entity.position.y * scale.y * zoom;
+
+    const factor = Math.min(0.5, zoom) * 2;
+    const radius = ICON_SIZE * factor;
+    console.log(`Drawing ping for entity at (${x}, ${y}) with progress ${progress} and radius ${radius}`);
+    ctx.beginPath();
+    ctx.arc(x, y, progress * radius, 0, Math.PI * 2, false);
+    ctx.fillStyle = `rgba(255, 0, 0, ${1 - progress})`;
+    ctx.fill();
+    ctx.closePath();
   }
   
   private drawOutlinedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
