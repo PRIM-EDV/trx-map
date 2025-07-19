@@ -62,7 +62,7 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
   ) {}
 
   ngAfterViewInit(): void {
-    this.input.register(this, 0);
+    this.input.register(this, 1);
 
     this.resizeObserver = new ResizeObserver(() => {
       resizeCanvasToHost(this.canvasRef.nativeElement, this.hostRef); 
@@ -87,7 +87,7 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
     })
   }
 
-  onRightClick(e: MouseEvent): boolean {
+  public onRightClick(e: MouseEvent): boolean {
     e.preventDefault();
 
     for (const entity of this.entities()) {
@@ -138,8 +138,8 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
     const offset = this.map.offset();
     const scale = this.map.scale();
     const zoom = this.map.zoom();
-    const x = e instanceof MouseEvent ? e.offsetX : e.center.x;
-    const y = e instanceof MouseEvent ? e.offsetY : e.center.y;
+    const x = e instanceof MouseEvent ? e.x : e.center.x;
+    const y = e instanceof MouseEvent ? e.y : e.center.y;
 
     const hitboxSize = ICON_SIZE * Math.min(0.5, zoom);
 
