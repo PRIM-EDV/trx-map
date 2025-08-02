@@ -53,8 +53,15 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
     });
     this.resizeObserver.observe(this.hostRef.nativeElement);
      
-    resizeCanvasToHost(this.canvasRef.nativeElement, this.hostRef); 
-    this.render();
+    resizeCanvasToHost(this.canvasRef.nativeElement, this.hostRef);
+     
+    if (this.terrainSvg.complete) {
+      this.render();
+    } else {
+      this.terrainSvg.onload = () => {
+        this.render();
+      };
+    }
   }
 
   ngOnDestroy(): void {

@@ -15,7 +15,7 @@ export class GridLayerComponent implements AfterViewInit, MapLayer {
 
   private resizeObserver!: ResizeObserver;
 
-  private readonly cellSize = 30;
+  private readonly cellSize = 100;
   private readonly labelSize = 20;
   private readonly gridOffset = { x: 0, y: 0 };
 
@@ -52,11 +52,11 @@ export class GridLayerComponent implements AfterViewInit, MapLayer {
     requestAnimationFrame(() => {
       ctx.clearRect(0, 0, this.canvasRef.nativeElement.width, this.canvasRef.nativeElement.height);
 
-      this.drawAxisLines(ctx, 30, 'x');
-      this.drawAxisLines(ctx, 30, 'y');
+      this.drawAxisLines(ctx, 25, 'x');
+      this.drawAxisLines(ctx, 13, 'y');
       this.drawAxisBackgrounds(ctx);
-      this.drawAxisLabels(ctx, 30, 'x');
-      this.drawAxisLabels(ctx, 30, 'y');
+      this.drawAxisLabels(ctx, 25, 'x', 12);
+      this.drawAxisLabels(ctx, 13, 'y', 10);
     });
   }
 
@@ -99,7 +99,7 @@ export class GridLayerComponent implements AfterViewInit, MapLayer {
     ctx.restore();
   }
 
-  private drawAxisLabels(ctx: CanvasRenderingContext2D, count: number, axis: 'x' | 'y'): void {
+  private drawAxisLabels(ctx: CanvasRenderingContext2D, count: number, axis: 'x' | 'y', start: number): void {
     const { offset, scale, gridOffset } = this.getAxisProps(axis);
     const canvas = this.canvasRef.nativeElement;
     const zoom = this.map.zoom();
@@ -112,15 +112,15 @@ export class GridLayerComponent implements AfterViewInit, MapLayer {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < count - 1; i++) {
       const pos = offset + i * step + gridOffset * scale * zoom;
 
       if (axis === 'x') {
-        ctx.fillText(`X${i + 1}`, pos + step / 2, canvas.height - this.labelSize / 2);
+        ctx.fillText(`X${start + i + 1}`, pos + step / 2, canvas.height - this.labelSize / 2);
       } else {
         ctx.save();
         ctx.rotate(-Math.PI / 2);
-        ctx.fillText(`Y${count - i}`, -pos - step / 2, this.labelSize / 2);
+        ctx.fillText(`Y${start + count - i}`, -pos - step / 2, this.labelSize / 2);
         ctx.restore();
       }
     }
