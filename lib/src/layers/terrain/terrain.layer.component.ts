@@ -71,7 +71,7 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
 
     requestAnimationFrame(() => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage( this.terrainSvg, offset.x, offset.y, 3540 * zoom, 2440 * zoom);
+      ctx.drawImage( this.terrainSvg, offset.x, offset.y, 3094 * zoom, 1544 * zoom);
     });
   }
 

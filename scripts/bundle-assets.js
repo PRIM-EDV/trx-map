@@ -32,7 +32,7 @@ const entries = svgFiles.map(({ key, filePath }) => {
 });
 
 const output = `// AUTO-GENERATED - DO NOT EDIT
-export const assets = {
+export const assets:  Record<string, string> = {
 ${entries.join(',\n')}
 } as const;
 
