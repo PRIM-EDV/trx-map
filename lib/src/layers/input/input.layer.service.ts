@@ -79,6 +79,16 @@ export class InputLayerService {
   }
 
   /**
+   * Initializes mouse move event handlers for the host element.
+   * These handlers dispatch mouse move events.
+   */
+  private initializeMouseHandlers() {
+    this.host.nativeElement.addEventListener('mousemove', (e: MouseEvent) => {
+      this.dispatch('onMouseMove', e);
+    });
+  }
+
+  /**
    * Initializes pan event handlers using Hammer.js.
    * These handlers dispatch pan start, pan, and pan end events.
    */

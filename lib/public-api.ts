@@ -1,4 +1,4 @@
 export * from './src/core/interfaces/click-event.interface';
-export * from './src/core/interfaces/entity-click-event.interface';
+export * from './src/core/interfaces/entity-mouse-event.interface';
 export * from './src/core/models/entity';  
 export * from './src/trx-map.component';
