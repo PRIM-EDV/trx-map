@@ -8,7 +8,7 @@ import { MapService } from './core/map.service';
 import { EntityLayerComponent } from "./layers/entity/entity.layer.component";
 import { Entity } from './core/models/entity';
 import { CommonModule } from '@angular/common';
-import { EntityClickEvent, MapClickEvent } from '../public-api';
+import { EntityMouseEvent, MapClickEvent } from '../public-api';
 import { GridLayerComponent } from "./layers/grid/grid.layer.component";
 
 @Component({
@@ -32,7 +32,8 @@ export class TrxMap {
   @Input() entities: Entity[] = [];
 
   @Output() terrainContextMenu = new EventEmitter<MapClickEvent>();
-  @Output() entityContextMenu = new EventEmitter<EntityClickEvent>();
-  @Output() entityDoubleClick = new EventEmitter<EntityClickEvent>();
+  @Output() entityContextMenu = new EventEmitter<EntityMouseEvent>();
+  @Output() entityDoubleClick = new EventEmitter<EntityMouseEvent>();
+  @Output() entityHover = new EventEmitter<EntityMouseEvent>();
   @Output() entityMoved = new EventEmitter<Entity>();
 }

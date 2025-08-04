@@ -67,7 +67,6 @@ export class EntityLayerService {
 
     const factor = Math.min(0.5, zoom) * 2;
     const radius = ICON_SIZE * factor;
-    console.log(`Drawing ping for entity at (${x}, ${y}) with progress ${progress} and radius ${radius}`);
     ctx.beginPath();
     ctx.arc(x, y, progress * radius, 0, Math.PI * 2, false);
     ctx.fillStyle = `rgba(255, 0, 0, ${1 - progress})`;

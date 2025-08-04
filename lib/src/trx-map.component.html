@@ -5,6 +5,7 @@
 <trx-entity-layer [entities]="this.entities" 
     (entityMoved)="entityMoved.emit($event)" 
     (entityContextMenu)="entityContextMenu.emit($event)" 
-    (entityDoubleClick)="entityDoubleClick.emit($event)">
+    (entityDoubleClick)="entityDoubleClick.emit($event)"
+    (entityHover)="entityHover.emit($event)">
 </trx-entity-layer>
 <trx-input-layer></trx-input-layer>

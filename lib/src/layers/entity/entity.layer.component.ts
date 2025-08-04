@@ -16,7 +16,7 @@ import { MapService } from '../../core/map.service';
 import { Entity, EntityState, EntityType } from '../../core/models/entity';
 import { EntityLayerService } from './entity.layer.service';
 import { resizeCanvasToHost } from '../common/utils/resize';
-import { EntityClickEvent } from '../../core/interfaces/entity-click-event.interface';
+import { EntityMouseEvent } from '../../core/interfaces/entity-mouse-event.interface';
 import { Point } from '../../core/interfaces/point.interface';
 import { PanState } from '../common/interfaces/pan.state.interface';
 import { ICON_SIZE } from './config/icon.config';
@@ -33,8 +33,9 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
   @ViewChild('entityCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('entityAnimationCanvas', { static: true }) animationCanvasRef!: ElementRef<HTMLCanvasElement>;
 
-  @Output() entityContextMenu = new EventEmitter<EntityClickEvent>();
-  @Output() entityDoubleClick = new EventEmitter<EntityClickEvent>();
+  @Output() entityContextMenu = new EventEmitter<EntityMouseEvent>();
+  @Output() entityDoubleClick = new EventEmitter<EntityMouseEvent>();
+  @Output() entityHover = new EventEmitter<EntityMouseEvent>();
   @Output() entityMoved = new EventEmitter<Entity>();
 
   private panState: PanState = { isPanning: false, start: { x: 0, y: 0 } };
@@ -96,14 +97,25 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
 
   public onDoubleClick(e: MouseEvent): boolean {
     e.preventDefault();
-
     for (const entity of this.entities()) {
       if (this.hitscan(e, entity)) {
-        const entityClickEvent: EntityClickEvent = Object.assign(e, { entity: entity });
+        const entityClickEvent: EntityMouseEvent = Object.assign(e, { entity: entity });
         this.entityDoubleClick.emit(entityClickEvent);
         return false;
       }
     }
+    return true;
+  }
+
+  public onMouseMove(e: MouseEvent): boolean {
+    for (const entity of this.entities()) {
+      if (this.hitscan(e, entity)) {
+        const entityMouseEvent: EntityMouseEvent = Object.assign(e, { entity: entity });
+        this.entityHover.emit(entityMouseEvent);
+        return true;
+      }
+    }
+    this.entityHover.emit(e);
     return true;
   }
 
@@ -112,7 +124,7 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
 
     for (const entity of this.entities()) {
       if (this.hitscan(e, entity)) {
-        const entityClickEvent: EntityClickEvent = Object.assign(e, { entity: entity });
+        const entityClickEvent: EntityMouseEvent = Object.assign(e, { entity: entity });
         this.entityContextMenu.emit(entityClickEvent);
         return false;
       }

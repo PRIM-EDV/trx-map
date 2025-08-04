@@ -24,6 +24,7 @@ export class InputLayerService {
     this.mc.add(new Hammer.Pinch());
 
     this.initializeClickHandlers();
+    this.initializeMouseHandlers();
     this.initializePanHandlers();
     this.initializePinchHandlers();
     this.initializeScroll();
@@ -75,6 +76,16 @@ export class InputLayerService {
     });
     this.host.nativeElement.addEventListener('dblclick', (e: MouseEvent) => {
       this.dispatch('onDoubleClick', e);
+    });
+  }
+
+  /**
+   * Initializes mouse move event handlers for the host element.
+   * These handlers dispatch mouse move events.
+   */
+  private initializeMouseHandlers() {
+    this.host.nativeElement.addEventListener('mousemove', (e: MouseEvent) => {
+      this.dispatch('onMouseMove', e);
     });
   }
 
