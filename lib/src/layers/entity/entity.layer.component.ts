@@ -85,14 +85,17 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
   render() {
     const ctx = this.canvasRef?.nativeElement.getContext('2d');
     if (!ctx) return;
-    ctx.clearRect(0, 0, this.canvasRef.nativeElement.width, this.canvasRef.nativeElement.height);
-    this.entities().forEach((entity) => {
-      try {
-        this.service.drawEntity(ctx, entity);
-      } catch (error) {
-        console.error(`Error rendering entity ${entity}:`, error);
-      }
-    })
+    
+    requestAnimationFrame(() => {ctx.clearRect(0, 0, this.canvasRef.nativeElement.width, this.canvasRef.nativeElement.height);
+      this.entities().forEach((entity) => {
+        try {
+          this.service.drawEntity(ctx, entity);
+        } catch (error) {
+          console.error(`Error rendering entity ${entity}:`, error);
+        }
+      });
+    });
+
   }
 
   public onDoubleClick(e: MouseEvent): boolean {
