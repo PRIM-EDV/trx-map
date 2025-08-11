@@ -12,6 +12,8 @@ export class EntityLayerService {
   private unitIcons: HTMLImageElement[] = [];
   private enemyIcons: HTMLImageElement[] = [];
   private objectIcons: HTMLImageElement[] = [];
+  private baseIcons: HTMLImageElement[] = [];
+  private symbols: HTMLImageElement[] = [];
 
   constructor(
     private readonly map: MapService
@@ -73,6 +75,23 @@ export class EntityLayerService {
     ctx.fill();
     ctx.closePath();
   }
+
+  public drawEntitySymbol(ctx: CanvasRenderingContext2D, entity: Entity, opacity: number) {
+    const offset = this.map.offset();
+    const scale = this.map.scale();
+    const zoom = this.map.zoom();
+
+    const x = offset.x + entity.position.x * scale.x * zoom;
+    const y = offset.y + entity.position.y * scale.y * zoom;
+
+    const factor = Math.min(0.5, zoom) * 2;
+    const size = ICON_SIZE * factor;
+    const halfSize = size / 2;
+    
+    ctx.globalAlpha = opacity;
+    ctx.drawImage(this.baseIcons[0], x - halfSize, y - halfSize, size, size);
+    ctx.drawImage(this.symbols[0], x - halfSize, y - halfSize + 2, size, size);
+  }
   
   private drawOutlinedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
     ctx.textAlign = 'center';
@@ -97,6 +116,12 @@ export class EntityLayerService {
     );
     this.objectIcons = await Promise.all(
       ICON_PATHS.objects.map((path) => loadImage(assets[path]))
+    );
+    this.baseIcons = await Promise.all(
+      ICON_PATHS.base.map((path) => loadImage(assets[path]))
+    );
+    this.symbols = await Promise.all(
+      ICON_PATHS.symbols.map((path) => loadImage(assets[path]))
     );
   }
 }

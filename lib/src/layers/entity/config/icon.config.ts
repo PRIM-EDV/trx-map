@@ -1,6 +1,6 @@
 import { SvgAssetPath } from "../../../../assets/assets";
 
-export const ICON_PATHS: {units: SvgAssetPath[], enemies: SvgAssetPath[], objects: SvgAssetPath[]} = {
+export const ICON_PATHS: {units: SvgAssetPath[], enemies: SvgAssetPath[], objects: SvgAssetPath[], base: SvgAssetPath[], symbols: SvgAssetPath[]} = {
   units: [
     'icons/icon_friend.svg',
     'icons/icon_friend10.svg',
@@ -20,6 +20,12 @@ export const ICON_PATHS: {units: SvgAssetPath[], enemies: SvgAssetPath[], object
   objects: [
     'icons/icon_object.svg',
   ],
+  base: [
+    'icons/icon_friend_base.svg',
+  ],
+  symbols: [
+    'symbols/crosshair.svg'
+  ]
 };
 
 export const ICON_SIZE = 48; 

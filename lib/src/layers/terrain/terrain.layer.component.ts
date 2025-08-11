@@ -41,7 +41,7 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
     private map: MapService,
     private hostRef: ElementRef<HTMLElement>
   ) {
-    this.terrainSvg.src = assets['terrain/terrain.svg'];
+    this.terrainSvg.src = assets['terrain/terrain_with_border.svg'];
   }
 
   ngAfterViewInit(): void {
@@ -77,6 +77,7 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
     const offset = this.map.offset();
 
     requestAnimationFrame(() => {
+      // this.fillBackground(4, 45, '#252526', '#3c3c3c');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage( this.terrainSvg, offset.x, offset.y, 3094 * zoom, 1544 * zoom);
     });
@@ -162,5 +163,20 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
     this.map.zoom.set(scale);
 
     return true;
+  }
+
+  private fillBackground(width: number, angle: number, colorBg: string, colorFg: string) {
+    const canvas = this.canvasRef.nativeElement;
+    const ctx = this.canvasRef.nativeElement.getContext('2d');
+    const angleRad = (angle * Math.PI) / 180;
+    const spacing = width * 2; // Abstand zwischen Linien, damit es keine Überlappung gibt
+
+    if (!ctx) return;
+
+    ctx.fillStyle = colorBg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.strokeStyle = colorFg;
+    ctx.lineWidth = width;
   }
 }

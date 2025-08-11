@@ -32,6 +32,7 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
   
   @ViewChild('entityCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('entityAnimationCanvas', { static: true }) animationCanvasRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('entityOverlayCanvas', { static: true }) overlayCanvasRef!: ElementRef<HTMLCanvasElement>;
 
   @Output() entityContextMenu = new EventEmitter<EntityMouseEvent>();
   @Output() entityDoubleClick = new EventEmitter<EntityMouseEvent>();
@@ -70,16 +71,19 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
     this.resizeObserver = new ResizeObserver(() => {
       resizeCanvasToHost(this.canvasRef.nativeElement, this.hostRef);
       resizeCanvasToHost(this.animationCanvasRef.nativeElement, this.hostRef);
+      resizeCanvasToHost(this.overlayCanvasRef.nativeElement, this.hostRef);
       this.render();
     });
     this.resizeObserver.observe(this.hostRef.nativeElement);
      
     resizeCanvasToHost(this.canvasRef.nativeElement, this.hostRef);
     resizeCanvasToHost(this.animationCanvasRef.nativeElement, this.hostRef);
-
-    this.render();
+    resizeCanvasToHost(this.overlayCanvasRef.nativeElement, this.hostRef);
 
     this.initializePingAnimation();
+    this.initializeSymbolAnimation();
+
+    this.render();
   }
 
   render() {
@@ -210,5 +214,29 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
         requestAnimationFrame(animate);
     };
     requestAnimationFrame(animate);
+  }
+
+  private initializeSymbolAnimation() {
+    const symbolCtx = this.overlayCanvasRef?.nativeElement.getContext('2d');
+    if (!symbolCtx) return;
+
+    const symbolAnimationDuration = 8000;
+    const symbolAnimationStart = performance.now();
+    const animateSymbols = (timestamp: number) => {
+        const elapsed = timestamp - symbolAnimationStart;
+        const progress = (elapsed % symbolAnimationDuration) / symbolAnimationDuration;
+
+        const opacity = progress < 0.25 ? 1 : progress < 0.5 ? 1 - 4 * (progress - 0.25) : progress < 0.75 ? 0 : 4 * (progress - 0.75);
+
+        symbolCtx.clearRect(0, 0, this.overlayCanvasRef?.nativeElement.width, this.overlayCanvasRef?.nativeElement.height);
+        this.entities().forEach((entity) => {
+            if (entity.type === EntityType.FRIEND) {
+                this.service.drawEntitySymbol(symbolCtx, entity, opacity);
+            }
+        });
+
+        requestAnimationFrame(animateSymbols);
+    };
+    requestAnimationFrame(animateSymbols);
   }
 }
