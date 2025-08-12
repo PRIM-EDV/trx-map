@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Ebene_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 32 32">
+  <!-- Generator: Adobe Illustrator 29.7.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 8)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #b4b4b4;
+      }
+    </style>
+  </defs>
+  <path class="st0" d="M16.14,7.58l1.5,4.52s.05.06.09.06h4.84c.15,0,.21.19.09.28l-3.91,2.79s-.05.07-.03.11l1.5,4.52c.05.14-.11.26-.23.17l-3.92-2.8s-.08-.02-.11,0l-3.92,2.8c-.12.09-.28-.03-.23-.17l1.5-4.52s0-.08-.03-.11l-3.91-2.79c-.12-.09-.06-.28.09-.28h4.84s.08-.03.09-.06l1.5-4.52c.05-.14.24-.14.29,0Z"/>
+  <polygon class="st0" points="16 22.59 12.44 20.75 12.44 22.59 16 24.43 19.56 22.59 19.56 20.75 16 22.59"/>
+</svg>

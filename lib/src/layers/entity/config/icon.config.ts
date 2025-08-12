@@ -24,7 +24,10 @@ export const ICON_PATHS: {units: SvgAssetPath[], enemies: SvgAssetPath[], object
     'icons/icon_friend_base.svg',
   ],
   symbols: [
-    'symbols/crosshair.svg'
+    'symbols/crosshair.svg',
+    'symbols/medkit.svg',
+    'symbols/tools.svg',
+    'symbols/leader.svg'
   ]
 };
 

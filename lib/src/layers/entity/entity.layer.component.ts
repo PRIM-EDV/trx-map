@@ -207,7 +207,9 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
         animationCtx.clearRect(0, 0, this.animationCanvasRef?.nativeElement.width, this.animationCanvasRef?.nativeElement.height);
         this.entities().forEach((entity) => {
             if (entity.type === EntityType.FRIEND && entity.state === EntityState.BATTLE) {
+              try {
                 this.service.drawEntityPing(animationCtx, entity, progress);
+              } catch { }
             }
         });
 
@@ -226,12 +228,14 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
         const elapsed = timestamp - symbolAnimationStart;
         const progress = (elapsed % symbolAnimationDuration) / symbolAnimationDuration;
 
-        const opacity = progress < 0.25 ? 1 : progress < 0.5 ? 1 - 4 * (progress - 0.25) : progress < 0.75 ? 0 : 4 * (progress - 0.75);
+        const opacity = progress < 0.4 ? 1 : progress < 0.5 ? 1 - 10 * (progress - 0.4) : progress < 0.9 ? 0 : 10 * (progress - 0.9);
 
         symbolCtx.clearRect(0, 0, this.overlayCanvasRef?.nativeElement.width, this.overlayCanvasRef?.nativeElement.height);
         this.entities().forEach((entity) => {
             if (entity.type === EntityType.FRIEND) {
+               try {
                 this.service.drawEntitySymbol(symbolCtx, entity, opacity);
+               } catch { }
             }
         });
 

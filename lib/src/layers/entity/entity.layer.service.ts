@@ -93,8 +93,8 @@ export class EntityLayerService {
     const factor = Math.min(0.5, zoom) * 2;
     const size = ICON_SIZE * factor;
     const halfSize = size / 2;
-    
-    if(entity && entity.symbol && entity.symbol >= 0) {
+
+    if(entity && entity.symbol !== undefined && entity.symbol >= 0) {
       ctx.globalAlpha = opacity;
       ctx.drawImage(this.baseIcons[0], x - halfSize, y - halfSize, size, size);
       ctx.drawImage(this.symbols[entity.symbol], x - halfSize, y - halfSize + 2, size, size);
