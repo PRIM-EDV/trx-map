@@ -73,10 +73,10 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
     if (!ctx) return;
 
     const canvas = this.canvasRef.nativeElement;
-    const zoom = this.map.zoom();
-    const offset = this.map.offset();
 
     requestAnimationFrame(() => {
+      const zoom = this.map.zoom();
+      const offset = this.map.offset();
       // this.fillBackground(4, 45, '#252526', '#3c3c3c');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage( this.terrainSvg, offset.x, offset.y, 3094 * zoom, 1544 * zoom);

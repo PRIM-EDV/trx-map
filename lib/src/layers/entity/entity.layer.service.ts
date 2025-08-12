@@ -76,6 +76,12 @@ export class EntityLayerService {
     ctx.closePath();
   }
 
+  /**
+   * Draws the symbol of an entity on the canvas.
+   * @param ctx The canvas rendering context.
+   * @param entity The entity whose symbol to draw.
+   * @param opacity The opacity of the symbol.
+   */
   public drawEntitySymbol(ctx: CanvasRenderingContext2D, entity: Entity, opacity: number) {
     const offset = this.map.offset();
     const scale = this.map.scale();
@@ -88,9 +94,11 @@ export class EntityLayerService {
     const size = ICON_SIZE * factor;
     const halfSize = size / 2;
     
-    ctx.globalAlpha = opacity;
-    ctx.drawImage(this.baseIcons[0], x - halfSize, y - halfSize, size, size);
-    ctx.drawImage(this.symbols[0], x - halfSize, y - halfSize + 2, size, size);
+    if(entity && entity.symbol && entity.symbol >= 0) {
+      ctx.globalAlpha = opacity;
+      ctx.drawImage(this.baseIcons[0], x - halfSize, y - halfSize, size, size);
+      ctx.drawImage(this.symbols[entity.symbol], x - halfSize, y - halfSize + 2, size, size);
+    }
   }
   
   private drawOutlinedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
