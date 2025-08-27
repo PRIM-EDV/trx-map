@@ -55,8 +55,8 @@ export class GridLayerComponent implements AfterViewInit, MapLayer {
       this.drawAxisLines(ctx, 25, 'x');
       this.drawAxisLines(ctx, 13, 'y');
       this.drawAxisBackgrounds(ctx);
-      this.drawAxisLabels(ctx, 25, 'x', 12);
-      this.drawAxisLabels(ctx, 13, 'y', 10);
+      this.drawAxisLabels(ctx, 25, 'x', 7);
+      this.drawAxisLabels(ctx, 13, 'y', 9);
     });
   }
 
