@@ -5,6 +5,7 @@ export enum EntityType {
     FOE = 1,
     FRIEND = 2,
     OBJECT = 3,
+    SELF = 4
 } 
 
 export enum EntityState {
