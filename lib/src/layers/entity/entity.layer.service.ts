@@ -50,6 +50,10 @@ export class EntityLayerService {
         ctx.drawImage(this.objectIcons[entity.size], x - halfSize, y - halfSize, size, size);
         this.drawOutlinedText(ctx, entity.text, x, y + halfSize + 11);
         break;
+      case entity.type === EntityType.SELF:
+        ctx.drawImage(this.selfIcon!, x - halfSize, y - halfSize, size, size);
+        this.drawOutlinedText(ctx, entity.text, x, y + halfSize + 11);
+        break;
     }
   }
 
