@@ -9,6 +9,7 @@ import { assets } from '../../../assets/assets';
 @Injectable()
 export class EntityLayerService {
 
+  private selfIcon: HTMLImageElement | null = null;
   private unitIcons: HTMLImageElement[] = [];
   private enemyIcons: HTMLImageElement[] = [];
   private objectIcons: HTMLImageElement[] = [];
@@ -37,7 +38,6 @@ export class EntityLayerService {
     const factor = Math.min(0.5, zoom) * 2;
     const size = ICON_SIZE * factor;
     const halfSize = size / 2;
-
     switch(true) {
       case entity.type === EntityType.FOE:
         ctx.drawImage(this.enemyIcons[entity.size], x - halfSize, y - halfSize, size, size); 
@@ -131,5 +131,6 @@ export class EntityLayerService {
     this.symbols = await Promise.all(
       ICON_PATHS.symbols.map((path) => loadImage(assets[path]))
     );
+    this.selfIcon = await loadImage(assets[ICON_PATHS.self]);
   }
 }
