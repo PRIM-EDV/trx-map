@@ -31,13 +31,13 @@
     "typescript": "~5.9.3"
   },
   "module": "./dist/fesm2022/trx-map.mjs",
-  "typings": "./dist/index.d.ts",
   "exports": {
     "./package.json": {
       "default": "./dist/package.json"
     },
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/types/trx-map.d.ts",
+      "esm": "./dist/fesm2022/trx-map.mjs",
       "default": "./dist/fesm2022/trx-map.mjs"
     }
   }
