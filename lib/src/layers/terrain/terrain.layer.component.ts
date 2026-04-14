@@ -8,7 +8,8 @@ import { MapLayer } from '../../common/interfaces/map.layer.interface';
 import { PanState } from '../../common/interfaces/pan.state.interface';
 import { PinchState } from '../../common/interfaces/pinch.state.interface';
 import { resizeCanvasToHost } from '../../common/utils/resize';
-import { getAssetUrl } from '../../common/utils/image';
+import { TerrainSvgRenderer } from './renderer/terrain-svg.renderer';
+import { BuildingNumberRenderer } from './renderer/building-number.renderer';
 
 @Component({
   selector: 'trx-terrain-layer',
@@ -37,16 +38,16 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
   private panState: PanState = { isPanning: false, start: { x: 0, y: 0 } };
   private pinchState: PinchState = { startZoom: 1.0 };
 
+  private terrainRenderer = new TerrainSvgRenderer();
+  private buildingNumbersRenderer = new BuildingNumberRenderer();
+
   private resizeObserver!: ResizeObserver;
-  private terrainSvg: HTMLImageElement = new Image();
 
   constructor(
     private input: InputLayerService,
     private map: MapService,
     private hostRef: ElementRef<HTMLElement>
-  ) {
-    this.terrainSvg.src = getAssetUrl('img/terrain/terrain_with_border.svg');
-  }
+  ) { }
 
   ngAfterViewInit(): void {
     this.input.register(this, 0);
@@ -59,13 +60,13 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
 
     resizeCanvasToHost(this.canvasRef.nativeElement, this.hostRef);
 
-    if (this.terrainSvg.complete) {
-      this.render();
-    } else {
-      this.terrainSvg.onload = () => {
-        this.render();
-      };
-    }
+    // if (this.terrainSvg.complete) {
+    //   this.render();
+    // } else {
+    //   this.terrainSvg.onload = () => {
+    //     this.render();
+    //   };
+    // }
   }
 
   ngOnDestroy(): void {
@@ -76,13 +77,13 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
     const ctx = this.canvasRef?.nativeElement.getContext('2d');
     if (!ctx) return;
 
-    const canvas = this.canvasRef.nativeElement;
-
     requestAnimationFrame(() => {
       const zoom = this.map.zoom();
       const offset = this.map.offset();
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(this.terrainSvg, offset.x, offset.y, 3094 * zoom, 1544 * zoom);
+
+      this.terrainRenderer.render(ctx, offset, zoom);
+      this.buildingNumbersRenderer.render(ctx, offset, zoom);
+
     });
   }
 
@@ -166,20 +167,5 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
     this.map.zoom.set(scale);
 
     return true;
-  }
-
-  private fillBackground(width: number, angle: number, colorBg: string, colorFg: string) {
-    const canvas = this.canvasRef.nativeElement;
-    const ctx = this.canvasRef.nativeElement.getContext('2d');
-    const angleRad = (angle * Math.PI) / 180;
-    const spacing = width * 2; // Abstand zwischen Linien, damit es keine Überlappung gibt
-
-    if (!ctx) return;
-
-    ctx.fillStyle = colorBg;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.strokeStyle = colorFg;
-    ctx.lineWidth = width;
   }
 }
