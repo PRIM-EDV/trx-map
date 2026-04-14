@@ -1,6 +1,6 @@
 import { ElementRef, Injectable } from '@angular/core';
+import { MapLayer } from '../../common/interfaces/map.layer.interface';
 
-import { MapLayer } from '../common/interfaces/map.layer.interface';
 
 @Injectable()
 export class InputLayerService {

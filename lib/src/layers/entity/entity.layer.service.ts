@@ -3,8 +3,7 @@ import { Injectable } from "@angular/core";
 import { MapService } from "../../core/map.service";
 import { Entity, EntityType } from "../../core/models/entity";
 import { ICON_PATHS, ICON_SIZE } from "./config/icon.config";
-import { loadImage } from "../common/utils/image";
-import { assets } from '../../../assets/assets';
+import { loadImage } from "../../common/utils/image";
 
 @Injectable()
 export class EntityLayerService {
@@ -121,20 +120,20 @@ export class EntityLayerService {
 
   private async loadIcons() {
     this.unitIcons = await Promise.all(
-      ICON_PATHS.units.map((path) => loadImage(assets[path]))
+      ICON_PATHS.units.map((path) => loadImage(path))
     );
     this.enemyIcons = await Promise.all(
-      ICON_PATHS.enemies.map((path) => loadImage(assets[path]))
+      ICON_PATHS.enemies.map((path) => loadImage(path))
     );
     this.objectIcons = await Promise.all(
-      ICON_PATHS.objects.map((path) => loadImage(assets[path]))
+      ICON_PATHS.objects.map((path) => loadImage(path))
     );
     this.baseIcons = await Promise.all(
-      ICON_PATHS.base.map((path) => loadImage(assets[path]))
+      ICON_PATHS.base.map((path) => loadImage(path))
     );
     this.symbols = await Promise.all(
-      ICON_PATHS.symbols.map((path) => loadImage(assets[path]))
+      ICON_PATHS.symbols.map((path) => loadImage(path))
     );
-    this.selfIcon = await loadImage(assets[ICON_PATHS.self]);
+    this.selfIcon = await loadImage(ICON_PATHS.self);
   }
 }

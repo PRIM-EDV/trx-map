@@ -11,15 +11,15 @@ import {
 } from '@angular/core';
 
 import { InputLayerService } from '../input/input.layer.service';
-import { MapLayer } from '../common/interfaces/map.layer.interface';
 import { MapService } from '../../core/map.service';
 import { Entity, EntityState, EntityType } from '../../core/models/entity';
 import { EntityLayerService } from './entity.layer.service';
-import { resizeCanvasToHost } from '../common/utils/resize';
 import { EntityMouseEvent } from '../../core/interfaces/entity-mouse-event.interface';
 import { Point } from '../../core/interfaces/point.interface';
-import { PanState } from '../common/interfaces/pan.state.interface';
 import { ICON_SIZE } from './config/icon.config';
+import { MapLayer } from '../../common/interfaces/map.layer.interface';
+import { PanState } from '../../common/interfaces/pan.state.interface';
+import { resizeCanvasToHost } from '../../common/utils/resize';
 
 @Component({
   selector: 'trx-entity-layer',

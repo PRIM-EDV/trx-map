@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, ChangeDetectionStrategy, AfterViewInit, ViewChild, ElementRef, effect } from '@angular/core';
 
-import { MapLayer } from '../common/interfaces/map.layer.interface';
 import { MapService } from '../../core/map.service';
-import { resizeCanvasToHost } from '../common/utils/resize';
+import { MapLayer } from '../../common/interfaces/map.layer.interface';
+import { resizeCanvasToHost } from '../../common/utils/resize';
 
 @Component({
   selector: 'trx-grid-layer',
