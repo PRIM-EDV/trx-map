@@ -1,4 +1,4 @@
-import { getAssetUrl } from "../../../common/utils/image";
+import config from '../../../../assets/building_numbers.json';
 
 interface BuildingNumber {
     value: string;
@@ -10,9 +10,7 @@ export class BuildingNumberRenderer {
     private buildingNumbers: BuildingNumber[] = [];
 
     constructor() {
-        fetch(getAssetUrl('building_numbers.json')).then(r => r.json()).then((data: BuildingNumber[]) => {
-            this.buildingNumbers = data;
-        });
+       this.buildingNumbers = config as BuildingNumber[];
     }
 
     render(ctx: CanvasRenderingContext2D, offset: { x: number, y: number }, zoom: number) {

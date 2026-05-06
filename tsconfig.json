@@ -12,6 +12,8 @@
         "./dist/map"
       ]
     },
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
