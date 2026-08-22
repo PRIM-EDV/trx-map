@@ -10,6 +10,9 @@ import { Entity } from './core/models/entity';
 import { CommonModule } from '@angular/common';
 import { EntityMouseEvent, MapClickEvent } from '../public-api';
 import { GridLayerComponent } from "./layers/grid/grid.layer.component";
+import { TrackerLayerComponent } from "./layers/tracker/tracker.layer.component";
+import { Tracker } from './core/models/tracker';
+import { TrackerMouseEvent } from './core/interfaces/tracker-mouse-event.interface';
 
 @Component({
   selector: 'trx-map',
@@ -18,7 +21,8 @@ import { GridLayerComponent } from "./layers/grid/grid.layer.component";
     InputLayerComponent,
     TerrainLayerComponent,
     EntityLayerComponent,
-    GridLayerComponent
+    GridLayerComponent,
+    TrackerLayerComponent
 ],
   providers: [
     MapService,
@@ -30,10 +34,12 @@ import { GridLayerComponent } from "./layers/grid/grid.layer.component";
 })
 export class TrxMap {
   @Input() entities: Entity[] = [];
+  @Input() trackers: Tracker[] = [];
 
   @Output() terrainContextMenu = new EventEmitter<MapClickEvent>();
   @Output() entityContextMenu = new EventEmitter<EntityMouseEvent>();
   @Output() entityDoubleClick = new EventEmitter<EntityMouseEvent>();
   @Output() entityHover = new EventEmitter<EntityMouseEvent>();
   @Output() entityMoved = new EventEmitter<Entity>();
+  @Output() trackerHover = new EventEmitter<TrackerMouseEvent>();
 }
