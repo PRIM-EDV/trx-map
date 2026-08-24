@@ -22,5 +22,6 @@ export interface Entity {
   text: string;
 
   state: EntityState;
-  symbol: number
+  symbol: number;
+  hidden: boolean;
 }

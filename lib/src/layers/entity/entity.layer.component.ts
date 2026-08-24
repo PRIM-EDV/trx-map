@@ -92,6 +92,8 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
     
     requestAnimationFrame(() => {ctx.clearRect(0, 0, this.canvasRef.nativeElement.width, this.canvasRef.nativeElement.height);
       this.entities().forEach((entity) => {
+        if (entity.hidden) return;
+
         try {
           this.service.drawEntity(ctx, entity);
         } catch (error) {
@@ -105,6 +107,7 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
   public onDoubleClick(e: MouseEvent): boolean {
     e.preventDefault();
     for (const entity of this.entities()) {
+      if (entity.hidden) continue;
       if (this.hitscan(e, entity)) {
         const entityClickEvent: EntityMouseEvent = Object.assign(e, { entity: entity });
         this.entityDoubleClick.emit(entityClickEvent);
@@ -116,6 +119,7 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
 
   public onMouseMove(e: MouseEvent): boolean {
     for (const entity of this.entities()) {
+      if (entity.hidden) continue;
       if (this.hitscan(e, entity)) {
         const entityMouseEvent: EntityMouseEvent = Object.assign(e, { entity: entity });
         this.entityHover.emit(entityMouseEvent);
@@ -130,6 +134,7 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
     e.preventDefault();
 
     for (const entity of this.entities()) {
+      if (entity.hidden) continue;
       if (this.hitscan(e, entity)) {
         const entityClickEvent: EntityMouseEvent = Object.assign(e, { entity: entity });
         this.entityContextMenu.emit(entityClickEvent);
@@ -141,6 +146,7 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
 
   public onPanStart(e: HammerInput): boolean {
       for (const entity of this.entities()) {
+        if (entity.hidden) continue;
         if (this.hitscan(e, entity)) {
           this.panEntity = entity;
           this.panState.isPanning = true;
@@ -206,6 +212,7 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
 
         animationCtx.clearRect(0, 0, this.animationCanvasRef?.nativeElement.width, this.animationCanvasRef?.nativeElement.height);
         this.entities().forEach((entity) => {
+            if (entity.hidden) return;
             if (entity.type === EntityType.FRIEND && entity.state === EntityState.BATTLE) {
               try {
                 this.service.drawEntityPing(animationCtx, entity, progress);
@@ -232,6 +239,7 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
 
         symbolCtx.clearRect(0, 0, this.overlayCanvasRef?.nativeElement.width, this.overlayCanvasRef?.nativeElement.height);
         this.entities().forEach((entity) => {
+            if (entity.hidden) return;
             if (entity.type === EntityType.FRIEND) {
                try {
                 this.service.drawEntitySymbol(symbolCtx, entity, opacity);

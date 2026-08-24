@@ -79,6 +79,8 @@ export class TrackerLayerComponent implements AfterViewInit, MapLayer {
     requestAnimationFrame(() => {
       ctx.clearRect(0, 0, this.canvasRef.nativeElement.width, this.canvasRef.nativeElement.height);
       this.trackers().forEach((tracker) => {
+        if (tracker.hidden) return;
+
         try {
           this.service.drawTracker(ctx, tracker);
         } catch (error) {
@@ -94,6 +96,7 @@ export class TrackerLayerComponent implements AfterViewInit, MapLayer {
 
   public onMouseMove(e: MouseEvent): boolean {
     for (const tracker of this.trackers()) {
+      if (tracker.hidden) continue;
       if (this.hitscan(e, tracker)) {
         const trackerMouseEvent: TrackerMouseEvent = Object.assign(e, { tracker: tracker });
         this.trackerHover.emit(trackerMouseEvent);
