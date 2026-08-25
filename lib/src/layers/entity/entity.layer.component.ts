@@ -97,7 +97,7 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
         try {
           this.service.drawEntity(ctx, entity);
         } catch (error) {
-          console.error(`Error rendering entity ${entity}:`, error);
+          console.error(`Error rendering entity:`, entity, error);
         }
       });
     });

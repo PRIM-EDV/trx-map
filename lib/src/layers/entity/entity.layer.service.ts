@@ -9,11 +9,11 @@ import { loadImage } from "../../common/utils/image";
 export class EntityLayerService {
 
   private selfIcon: HTMLImageElement | null = null;
-  private unitIcons: HTMLImageElement[] = [];
-  private enemyIcons: HTMLImageElement[] = [];
-  private objectIcons: HTMLImageElement[] = [];
-  private baseIcons: HTMLImageElement[] = [];
-  private symbols: HTMLImageElement[] = [];
+  private unitIcons: HTMLImageElement[] = Array.from({ length: ICON_PATHS.units.length }, () => new Image());
+  private enemyIcons: HTMLImageElement[] = Array.from({ length: ICON_PATHS.enemies.length }, () => new Image());
+  private objectIcons: HTMLImageElement[] = Array.from({ length: ICON_PATHS.objects.length }, () => new Image());
+  private baseIcons: HTMLImageElement[] = Array.from({ length: ICON_PATHS.base.length }, () => new Image());
+  private symbols: HTMLImageElement[] = Array.from({ length: ICON_PATHS.symbols.length }, () => new Image());
 
   constructor(
     private readonly map: MapService
@@ -26,7 +26,7 @@ export class EntityLayerService {
    * @param ctx The canvas rendering context.
    * @param entity The entity to draw.
    */
-  public drawEntity(ctx: CanvasRenderingContext2D, entity: Entity) {
+  public async drawEntity(ctx: CanvasRenderingContext2D, entity: Entity) {
     const offset = this.map.offset();
     const scale = this.map.scale();
     const zoom = this.map.zoom();
@@ -37,20 +37,24 @@ export class EntityLayerService {
     const factor = Math.min(0.5, zoom) * 2;
     const size = ICON_SIZE * factor;
     const halfSize = size / 2;
-    switch(true) {
+    switch (true) {
       case entity.type === EntityType.FOE:
-        ctx.drawImage(this.enemyIcons[entity.size], x - halfSize, y - halfSize, size, size); 
+        const enemyIcon = await this.getIcon(this.enemyIcons, entity.size);
+        ctx.drawImage(enemyIcon, x - halfSize, y - halfSize, size, size);
         break;
       case entity.type === EntityType.FRIEND:
-        ctx.drawImage(this.unitIcons[entity.size], x - halfSize, y - halfSize, size, size);
-        this.drawOutlinedText(ctx, entity.text, x, y + halfSize + 11); 
+        const unitIcon = await this.getIcon(this.unitIcons, entity.size);
+        ctx.drawImage(unitIcon, x - halfSize, y - halfSize, size, size);
+        this.drawOutlinedText(ctx, entity.text, x, y + halfSize + 11);
         break
       case entity.type === EntityType.OBJECT:
-        ctx.drawImage(this.objectIcons[entity.size], x - halfSize, y - halfSize, size, size);
+        const objectIcon = await this.getIcon(this.objectIcons, entity.size);
+        ctx.drawImage(objectIcon, x - halfSize, y - halfSize, size, size);
         this.drawOutlinedText(ctx, entity.text, x, y + halfSize + 11);
         break;
       case entity.type === EntityType.SELF:
-        ctx.drawImage(this.selfIcon!, x - halfSize, y - halfSize, size, size);
+        const selfIcon = await this.getIcon(this.baseIcons, entity.size);
+        ctx.drawImage(selfIcon, x - halfSize, y - halfSize, size, size);
         this.drawOutlinedText(ctx, entity.text, x, y + halfSize + 11);
         break;
     }
@@ -97,13 +101,13 @@ export class EntityLayerService {
     const size = ICON_SIZE * factor;
     const halfSize = size / 2;
 
-    if(entity && entity.symbol !== undefined && entity.symbol >= 0) {
+    if (entity && entity.symbol !== undefined && entity.symbol >= 0) {
       ctx.globalAlpha = opacity;
       ctx.drawImage(this.baseIcons[0], x - halfSize, y - halfSize, size, size);
       ctx.drawImage(this.symbols[entity.symbol], x - halfSize, y - halfSize + 2, size, size);
     }
   }
-  
+
   private drawOutlinedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
     ctx.textAlign = 'center';
 
@@ -118,22 +122,28 @@ export class EntityLayerService {
     ctx.fillText(text, x, y);
   }
 
+  private async getIcon(list: HTMLImageElement[], index: number): Promise<HTMLImageElement> {
+    const icon = list[index];
+
+    if (!icon) {
+      return Promise.reject(new Error(`Icon at index ${index} not found.`));
+    }
+
+    if (icon.complete && icon.naturalWidth > 0) {
+      return Promise.resolve(icon);
+    }
+
+    return new Promise((resolve, reject) => {
+      icon.onload = () => resolve(icon);
+      icon.onerror = () => reject(new Error(`Could not load icon at index ${index}.`));
+    });
+  }
+
   private async loadIcons() {
-    this.unitIcons = await Promise.all(
-      ICON_PATHS.units.map((path) => loadImage(path))
-    );
-    this.enemyIcons = await Promise.all(
-      ICON_PATHS.enemies.map((path) => loadImage(path))
-    );
-    this.objectIcons = await Promise.all(
-      ICON_PATHS.objects.map((path) => loadImage(path))
-    );
-    this.baseIcons = await Promise.all(
-      ICON_PATHS.base.map((path) => loadImage(path))
-    );
-    this.symbols = await Promise.all(
-      ICON_PATHS.symbols.map((path) => loadImage(path))
-    );
-    this.selfIcon = await loadImage(ICON_PATHS.self);
+    this.unitIcons.map((icon, index) => loadImage(ICON_PATHS.units[index], icon));
+    this.enemyIcons.map((icon, index) => loadImage(ICON_PATHS.enemies[index], icon));
+    this.objectIcons.map((icon, index) => loadImage(ICON_PATHS.objects[index], icon));
+    this.baseIcons.map((icon, index) => loadImage(ICON_PATHS.base[index], icon));
+    this.symbols.map((icon, index) => loadImage(ICON_PATHS.symbols[index], icon));
   }
 }

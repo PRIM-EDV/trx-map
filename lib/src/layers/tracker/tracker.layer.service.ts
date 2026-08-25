@@ -8,7 +8,7 @@ import { loadImage } from "../../common/utils/image";
 @Injectable()
 export class TrackerLayerService {
 
-  private trackerIcon: HTMLImageElement | null = null;
+  private trackerIcon: HTMLImageElement = new Image();
 
   constructor(
     private readonly map: MapService
@@ -39,6 +39,6 @@ export class TrackerLayerService {
   }
 
   private async loadIcons() {
-    this.trackerIcon = await loadImage(ICON_PATHS.tracker);
+    this.trackerIcon = await loadImage(ICON_PATHS.tracker, this.trackerIcon);
   }
 }

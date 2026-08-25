@@ -1,12 +1,13 @@
-export async function loadImage(src: string): Promise<HTMLImageElement> {
+export function loadImage(src: string, img: HTMLImageElement): HTMLImageElement {
   src = getAssetUrl(src);
-  console.debug(`Loading image: ${src}`);
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.src = src;
-    img.onload = () => resolve(img);
-    img.onerror = (error) => reject(error);
-  });
+  img.src = src;
+
+  return img;
+  // return new Promise((resolve, reject) => {
+  //   img.src = src;
+  //   img.onload = () => resolve(img);
+  //   img.onerror = (error) => reject(error);
+  // });
 }
 
 export function getAssetUrl(assetName: string): string {
