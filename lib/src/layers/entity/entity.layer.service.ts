@@ -48,12 +48,12 @@ export class EntityLayerService {
         this.drawOutlinedText(ctx, entity.text, x, y + halfSize + 11);
         break
       case entity.type === EntityType.OBJECT:
-        const objectIcon = await this.getIcon(this.objectIcons, entity.size);
+        const objectIcon = await this.getIcon(this.objectIcons, 0);
         ctx.drawImage(objectIcon, x - halfSize, y - halfSize, size, size);
         this.drawOutlinedText(ctx, entity.text, x, y + halfSize + 11);
         break;
       case entity.type === EntityType.SELF:
-        const selfIcon = await this.getIcon(this.baseIcons, entity.size);
+        const selfIcon = await this.getIcon(this.baseIcons, 0);
         ctx.drawImage(selfIcon, x - halfSize, y - halfSize, size, size);
         this.drawOutlinedText(ctx, entity.text, x, y + halfSize + 11);
         break;
