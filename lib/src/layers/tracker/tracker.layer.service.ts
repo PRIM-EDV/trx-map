@@ -36,9 +36,24 @@ export class TrackerLayerService {
     const halfSize = size / 2;
 
     ctx.drawImage(this.trackerIcon, x - halfSize, y - halfSize, size, size);
+    this.drawOutlinedText(ctx, tracker.text, x, y - halfSize - 11);
   }
 
-  private async loadIcons() {
-    this.trackerIcon = await loadImage(ICON_PATHS.tracker, this.trackerIcon);
+   private drawOutlinedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
+    ctx.textAlign = 'center';
+
+    ctx.font = '11px Fira Code';
+    ctx.fillStyle = '#000000';
+    ctx.lineWidth = 2;
+    ctx.strokeText(text, x, y);
+
+    ctx.font = '11px Fira Code';
+    ctx.fillStyle = '#ffffff';
+    ctx.lineWidth = 1;
+    ctx.fillText(text, x, y);
+  }
+
+  private loadIcons() {
+    this.trackerIcon = loadImage(ICON_PATHS.tracker, this.trackerIcon);
   }
 }

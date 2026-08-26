@@ -11,6 +11,7 @@ export class BuildingNumberRenderer {
 
     constructor() {
        this.buildingNumbers = config as BuildingNumber[];
+       console.log('Building numbers loaded:', this.buildingNumbers.length);
     }
 
     render(ctx: CanvasRenderingContext2D, offset: { x: number, y: number }, zoom: number) {

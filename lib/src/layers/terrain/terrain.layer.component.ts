@@ -47,7 +47,9 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
     private input: InputLayerService,
     private map: MapService,
     private hostRef: ElementRef<HTMLElement>
-  ) { }
+  ) { 
+    console.log(this.buildingNumbersRenderer);
+  }
 
   ngAfterViewInit(): void {
     this.input.register(this, 0);
@@ -71,11 +73,11 @@ export class TerrainLayerComponent implements AfterViewInit, MapLayer {
     const ctx = this.canvasRef?.nativeElement.getContext('2d');
     if (!ctx) return;
 
-    requestAnimationFrame(() => {
+    requestAnimationFrame(async () => {
       const zoom = this.map.zoom();
       const offset = this.map.offset();
 
-      this.terrainRenderer.render(ctx, offset, zoom);
+      await this.terrainRenderer.render(ctx, offset, zoom);
       this.buildingNumbersRenderer.render(ctx, offset, zoom);
 
     });
