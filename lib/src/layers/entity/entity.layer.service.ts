@@ -37,6 +37,7 @@ export class EntityLayerService {
     const factor = Math.min(0.5, zoom) * 2;
     const size = ICON_SIZE * factor;
     const halfSize = size / 2;
+    
     switch (true) {
       case entity.type === EntityType.FOE:
         const enemyIcon = await this.getIcon(this.enemyIcons, entity.size);

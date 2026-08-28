@@ -2,13 +2,13 @@
     (terrainContextMenu)="terrainContextMenu.emit($event)">
 </trx-terrain-layer>
 <trx-grid-layer></trx-grid-layer>
+<trx-tracker-layer [trackers]="this.trackers"
+    (trackerHover)="trackerHover.emit($event)">
+</trx-tracker-layer>
 <trx-entity-layer [entities]="this.entities"
     (entityMoved)="entityMoved.emit($event)"
     (entityContextMenu)="entityContextMenu.emit($event)"
     (entityDoubleClick)="entityDoubleClick.emit($event)"
     (entityHover)="entityHover.emit($event)">
 </trx-entity-layer>
-<trx-tracker-layer [trackers]="this.trackers"
-    (trackerHover)="trackerHover.emit($event)">
-</trx-tracker-layer>
 <trx-input-layer></trx-input-layer>

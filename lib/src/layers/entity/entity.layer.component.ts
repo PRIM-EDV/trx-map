@@ -185,7 +185,6 @@ export class EntityLayerComponent implements AfterViewInit, MapLayer {
     const zoom = this.map.zoom();
     const x = e instanceof MouseEvent ? e.x : e.center.x;
     const y = e instanceof MouseEvent ? e.y : e.center.y;
-
     const hitboxSize = ICON_SIZE * Math.min(0.5, zoom);
 
     const mapX = (x - this.canvasRef.nativeElement.getBoundingClientRect().left - offset.x) / zoom / scale.x;

@@ -36,7 +36,7 @@ export class TrackerLayerService {
     const halfSize = size / 2;
 
     ctx.drawImage(this.trackerIcon, x - halfSize, y - halfSize, size, size);
-    this.drawOutlinedText(ctx, tracker.text, x, y - halfSize - 11);
+    this.drawOutlinedText(ctx, tracker.text, x, y - halfSize);
   }
 
    private drawOutlinedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
